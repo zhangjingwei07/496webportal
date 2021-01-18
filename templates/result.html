@@ -1,0 +1,39 @@
+{% extends 'frame.html' %}
+{% block sidebar %}
+<ul class="vertical-nav-menu">
+<li>
+        <a href="/process/process-history.html">
+            <i class="metismenu-icon fas fa-chevron-circle-left"></i>
+            Processes History
+        </a>
+</li>
+    <li class="app-sidebar__heading">Report</li>
+    <li>
+        <a href="/process/process.html?id={{ worker.id }}">
+            <i class="metismenu-icon fas fa-clipboard-check"></i>
+            Summary
+        </a>
+    </li>
+    <li class="app-sidebar__heading">Data</li>
+    <li>
+        <a href="/process/data.html?id={{ worker.id }}">
+            <i class="metismenu-icon fas fa-table"></i>
+            Data Details
+        </a>
+    </li>
+    <li class="app-sidebar__heading">Visualizations</li>
+    <li>
+        <a href="/plot/plots.html?id={{ worker.id }}">
+            <i class="metismenu-icon fas fa-clipboard"></i>
+            All Plots
+        </a>
+    </li>
+    <li>
+        <a href="/plot/plot-studio.html?id={{ worker.id }}">
+            <i class="metismenu-icon fas fa-drafting-compass"></i>
+            Plot Studio
+        </a>
+    </li>
+
+</ul>
+{% endblock %}

@@ -1,0 +1,204 @@
+{% extends 'nav.html' %}
+{% load static %}
+{% block content %}
+    <div class="app-main__outer">
+        <div class="app-main__inner">
+            <div class="app-page-title">
+                <div class="page-title-wrapper">
+                    <div class="page-title-heading">
+                        <div class="page-title-icon">
+                            <i class="fas fa-clipboard">
+                            </i>
+                        </div>
+                        <div>Create New Process
+                            <div class="page-title-subheading">
+                                Order the steps to start a new process
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
+                    <li class="nav-item">
+                        <a role="tab" class="nav-link active" id="tab-1" data-toggle="tab" href="#tab-content-1">
+                            <span>Create New</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a role="tab" class="nav-link" id="tab-2" data-toggle="tab" href="#tab-content-2">
+                            <span>Load Saved Procedure</span>
+                        </a>
+                    </li>
+                </ul>
+
+
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane tabs-animation fade show active" id="tab-content-1" role="tabpanel">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="main-card mb-3 card">
+                                <div class="card-header">Current Queue
+                                    <button class="btn btn-primary btn-lg ml-3 ml-auto mr-3" id="change-queue-display">
+                                        <i class="fas fa-th-large"></i>
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-3">
+                                        <div class="form-inline">
+                                            <div class="form-group">
+                                                <input type="text" id="chosen-dataset"
+                                                       class="form-control mx-sm-3 is-invalid"
+                                                       value="" disabled>
+                                                <button class="btn btn-primary btn-lg ml-3" id="choose-dataset"
+                                                        data-toggle="modal" data-target="#modal-dataset">
+                                                    <i class="fas fa-table"></i> Select Dataset
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <div class="row" id='active-process-table'>
+
+
+                                    </div>
+                                </div>
+                                <div class="card-footer" id="submit-footer">
+                                    <div class="col">
+                                        <div class="form-inline">
+                                            <div class="form-group">
+                                                <label for="worker-name">Worker Name </label>
+                                                <input type="text" id="worker-name" class="form-control mx-sm-3"
+                                                       value="New Worker">
+                                                <button class="btn btn-success btn-lg ml-3" id="submit-process">
+                                                    Start new Process
+                                                </button>
+                                                <button class="btn btn-primary btn-lg ml-3" id="save-process">Save
+                                                    Process
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id="new-steps-card">
+                        <div class="col-12">
+                            <div class="main-card mb-3 card">
+                                <div class="card-header">Add New Steps</div>
+                                <div class="card-body" id="new-steps-table">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend"><span
+                                                        class="input-group-text">Search</span></div>
+                                                <input type="text" class="form-control search">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <ul class="pagination justify-content-end"></ul>
+                                        </div>
+                                    </div>
+                                    <div class="row list"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="tab-pane tabs-animation fade" id="tab-content-2" role="tabpanel">
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block modal %}
+    <div class="modal fade" id="modal-dataset" tabindex="-1" role="dialog" aria-labelledby="datasetModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Choose Dataset</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="dataset-table">
+                        <div class="row mb-2">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <div class="input-group-prepend"><span class="input-group-text">Search</span></div>
+                                    <input type="text" class="form-control search">
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <ul class="pagination"></ul>
+                            </div>
+                        </div>
+                        <table class="table table-hover">
+                            <thead class="thead-light">
+                            <tr>
+                                <th class="sort" data-sort="name">Name <i class="fas fa-sort"></i></th>
+                                <th>Shape</th>
+                                <th class="sort" data-sort="description">Description <i class="fas fa-sort"></i></th>
+                                <th class="sort" data-sort="modified">Modified <i class="fas fa-sort"></i></th>
+                            </tr>
+                            </thead>
+                            <tbody class="list">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="modal-option" tabindex="-1" role="dialog" aria-labelledby="datasetModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Set Option</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row m-2" id="option-content">
+                    </div>
+                    <div class="form-row m-4" id="option-bool">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block js %}
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-sortablejs@latest/jquery-sortable.js"></script>
+    <script type="text/javascript">
+        $("#active-process-table").sortable()
+    </script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+    <script type="text/javascript" src={% static "scripts/process/process-factory.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/process/process.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/process/process-submit.js" %}></script>
+{% endblock %}

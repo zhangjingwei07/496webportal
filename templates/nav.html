@@ -1,0 +1,37 @@
+{% extends 'frame.html' %}
+{% block sidebar %}
+<ul class="vertical-nav-menu">
+    <li class="app-sidebar__heading">Datasets</li>
+    <li>
+        <a href="/dataset/dataupload.html">
+            <i class="metismenu-icon fas fa-file-upload"></i>
+            Upload New Dataset
+        </a>
+    </li>
+    <li>
+        <a href="/dataset/datasets.html">
+            <i class="metismenu-icon fas fa-database"></i>
+            All Datasets
+        </a>
+    </li>
+    <li class="app-sidebar__heading">Processes</li>
+    <li>
+        <a href="/process/new-process.html">
+            <i class="metismenu-icon fas fa-clipboard"></i>
+            Create A New Process
+        </a>
+    </li>
+    <li>
+        <a href="/process/new-process.html">
+            <i class="metismenu-icon fas fa-paperclip"></i>
+            Manage Procdures
+        </a>
+    </li>
+    <li>
+        <a href="/process/process-history.html">
+            <i class="metismenu-icon fas fa-history"></i>
+            Processes History
+        </a>
+    </li>
+</ul>
+{% endblock %}

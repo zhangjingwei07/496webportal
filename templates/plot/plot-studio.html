@@ -1,0 +1,191 @@
+{% extends "frame.html" %}
+{% load static %}
+
+{% block header %}
+  <ul class="header-menu nav">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="change-layout" role="button" data-toggle="dropdown"
+         aria-haspopup="true" aria-expanded="false">Change Layout</a>
+      <div class="dropdown-menu" aria-labelledby="change-layout">
+        <a id="orientation" class="button-link dropdown-item plotly-options" data-orientation="v">Vertical Layout</a>
+        <a id="legend" class="button-link dropdown-item plotly-options">Show Legend</a>
+        <a id="template" class="button-link dropdown-item plotly-options">Light Background</a>
+      </div>
+    </li>
+  </ul>
+{% endblock %}
+
+{% block head %}
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+{% endblock %}
+
+{% block sidebar %}
+  <ul class="vertical-nav-menu">
+    <li>
+      <a href="/process/process.html?id={{ worker.id }}">
+        <i class="metismenu-icon fas fa-chevron-circle-left"></i>
+        Process Summary
+      </a>
+    </li>
+    <li class="app-sidebar__heading">
+      Embed Plot
+    </li>
+    <li>
+      <a href="javascript:void(0);" role="button" onclick="resetStudio()">
+        <i class="metismenu-icon fas fa-drafting-compass"></i>
+        Create new Plot
+      </a>
+    </li>
+    <li class="app-sidebar__heading scatter">
+      Data Point Slicing
+    </li>
+    <li class="scatter">
+      <a href="javascript:void(0);" role="button" id="select-traces" class="plotly-options">
+        <i class="metismenu-icon fa fa-filter"></i>
+        Select by Cluster
+      </a>
+    </li>
+    <li class="scatter">
+      <a href="javascript:void(0);" role="button" id="select-points" class="plotly-options">
+        <i class="metismenu-icon fa fa-object-group"></i>
+        Select by Points
+      </a>
+    </li>
+    <li class="scatter">
+      <a href="javascript:void(0);" role="button" id="rank_marker_genes" class="plotly-options">
+        <i class="metismenu-icon fa fa-clipboard-list"></i>
+        Rank marker genes
+      </a>
+    </li>
+  </ul>
+{% endblock %}
+
+{% block content %}
+  <div class="app-main__outer">
+    <div class="app-main__inner">
+      <div id="plotly" style="height: 100vh; margin: -30px -30px 0 -30px;" hidden></div>
+      <div class="id" hidden>{{ worker.id }}</div>
+      <div class="row" id="div-select">
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="main-card card">
+            <div class="card-header">Embedding Scatter</div>
+            <div class="card-body">
+              <div class="form-group">
+                <label for="scatter-basis">Basis</label>
+                <select class="form-control basis" id="scatter-basis">
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="scatter-names">Names</label>
+                <select class="selectpicker form-control groups" id="scatter-names" multiple>
+                </select>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="mt-2 mr-2 btn btn-success" id="scatter-plot">Plot</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-4" id="marker-card">
+          <div class="main-card card">
+            <div class="card-header">Rank marker genes</div>
+            <div class="card-body">
+              <div class="form-group">
+                <label for="rank-marker-genes-method">Plot Method</label>
+                <select class="form-control" id="rank-marker-genes-method">
+                  <option value="studio.rank_marker_genes">panels</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="rank-marker-genes-names">Name/Group</label>
+                <select class="form-control groups" id="rank-marker-genes-names">
+                </select>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="mt-2 mr-2 btn btn-success" id="rank-marker-genes-plot">Plot</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div hidden>
+        <span id="dataset-shape">{{ dataset.n_vars }}, {{ dataset.n_obs }}</span>
+        <span id="dataset-attrs">{{ dataset.attrs }}</span>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+  <script type="text/javascript" src={% static "scripts/plot/plotly-options.js" %}></script>
+  <script type="text/javascript" src={% static "scripts/plot/plot-studio.js" %}></script>
+  <script>
+      const remove_history = (id) => {
+          $.ajax({
+              url: '/process/process-history',
+              data: {id: id, action: 'DELETE'},
+              type: 'POST',
+              success: (data) => {
+                  window.location.href = "/process/process-history.html"
+              }
+          });
+      };
+  </script>
+{% endblock %}
+
+{% block modal %}
+  <div class="modal fade" id="modal-data-wizard" tabindex="-1" role="dialog" aria-labelledby="datasetModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">Data Exporter</div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 col-lg-4">
+              <div class="widget-content">
+                <div class="widget-content-wrapper">
+                  <div class="widget-content-right ml-0 mr-3">
+                    <div class="widget-numbers text-success" id="selected-length">0</div>
+                  </div>
+                  <div class="widget-content-left">
+                    <div class="widget-heading">Number of Observations Selected<br>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-6">
+              <div class="position-relative form-group">
+                <label for="name-input">Dataset Name</label>
+                <input name="city" id="name-input" type="text" class="form-control">
+              </div>
+              <div class="position-relative form-group">
+                <label for="description-input">Description</label>
+                <textarea name="city" id="description-input" type="text"
+                          class="form-control"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="mt-2 mr-2 btn btn-success" id="select-confirm" disabled>Export Data</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="modal-plotly" tabindex="-1" role="dialog" aria-labelledby="datasetModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-body" style="padding: 0">
+          <div id="plotly-sub" style="max-width: 1138px; height: 80vh"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

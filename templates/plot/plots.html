@@ -1,0 +1,79 @@
+{% extends "result.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="app-main__outer">
+        <div class="app-main__inner">
+            <div class="app-page-title">
+                <div class="page-title-wrapper">
+                    <div class="page-title-heading">
+                        <div class="page-title-icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <div>
+                            <span id="worker-name">{{ worker.name }}</span>
+                            <div class="page-title-subheading">
+                                Last Modified: {{ worker.time }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-title-actions">
+                        <button class="btn btn-danger mr-3 id" onclick="remove_history('{{ worker.id }}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                {% for p in plots %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="main-card card">
+
+                            <div class="card-header text-lowercase"
+                                 {% if p.type == "iplot" %}style="color:#3ac47d"{% endif %}>
+                                {{ p.call }}
+                            </div>
+
+                            <div class="card-body p-0">
+                                {% if p.type == "iplot" %}
+                                    <a href="/plot/plot-detail.html?id={{ p.wrid }}&output={{ p.output }}">
+                                        <img src="/userData/processes/{{ p.wrid }}/{{ p.output }}"
+                                             class="img-fluid plot-card-body"
+                                             alt="{{ p.output }}"/>
+                                    </a>
+                                {% endif %}
+                                {% if p.type == "plot" %}
+                                    <img src="/userData/temp/{{ p.wrid }}/{{ p.output }}"
+                                         class="img-fluid plot-card-body"
+                                         alt="{{ p.output }}"/>
+                                {% endif %}
+
+                            </div>
+                            <div class="card-footer">
+                                <a class="btn btn-success" href="/userData/temp/{{ p.wrid }}/{{ p.output }}"
+                                   download>Download</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        const remove_history = (id) => {
+            $.ajax({
+                url: '/process/process-history',
+                data: {id: id, action: 'DELETE'},
+                type: 'POST',
+                success: (data) => {
+                    window.location.href = "/process/process-history.html"
+                }
+            });
+        };</script>
+{% endblock %}

@@ -1,0 +1,278 @@
+{% extends 'settings.html' %}
+{% load static %}
+{% block content %}
+  <div class="app-main__outer">
+    <div class="app-main__inner">
+      <div class="app-page-title">
+        <div class="page-title-wrapper">
+          <div class="page-title-heading">
+            <div class="page-title-icon">
+              <i class="fas fa-book">
+              </i>
+            </div>
+            <div>Manage Installed Methods
+              <div class="page-title-subheading">
+                Manage the Installed Methods and Packages to be used in creating procedures.
+              </div>
+            </div>
+          </div>
+          <div class="page-title-actions">
+            <button type="button" class="btn-shadow mr-3 btn btn-primary" onclick="exportMethods()">
+                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                <i class="fas fa-cloud-download-alt fa-w-20"></i>
+                            </span>
+              Export
+            </button>
+            <button type="button" class="btn-shadow mr-3 btn btn-primary"
+                    onclick='$("#modal-import-dataset").modal("show")'>
+                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                <i class="fas fa-cloud-upload-alt fa-w-20"></i>
+                            </span>
+              Import
+            </button>
+          </div>
+        </div>
+        <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
+          <li class="nav-item">
+            <a role="tab" class="nav-link active" id="tab-1" data-toggle="tab" href="#tab-content-1">
+              <span>List Methods</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a role="tab" class="nav-link" id="tab-2" data-toggle="tab" href="#tab-content-2">
+              <span>Add/Update New Method</span>
+            </a>
+          </li>
+        </ul>
+
+      </div>
+      <div class="tab-content">
+        <div class="tab-pane tabs-animation fade show active" id="tab-content-1" role="tabpanel">
+          <div class="row">
+            <div class="col" id="methods-table">
+              <div class="row mb-2">
+                <div class="col-md-4">
+                  <div class="input-group">
+                    <div class="input-group-prepend"><span class="input-group-text">Search</span>
+                    </div>
+                    <input type="text" class="form-control search">
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <ul class="pagination"></ul>
+                </div>
+              </div>
+              <table class="mb-0 table table-hover">
+                <thead class="thead-dark">
+                <tr>
+                  <th class="sort" data-sort="type">Type <i class="fas fa-sort"></i></th>
+                  <th class="sort" data-sort="package">Package <i class="fas fa-sort"></i></th>
+                  <th class="sort" data-sort="name">Method Call <i class="fas fa-sort"></i></th>
+                  <th class="sort" data-sort="description" style="width: 50%">Description <i class="fas fa-sort"></i>
+                  </th>
+                  <th style="min-width: 100px">Actions</th>
+                </tr>
+                </thead>
+                <tbody class="list">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane tabs-animation fade" id="tab-content-2" role="tabpanel">
+          <div class="row">
+            <div class="col">
+              <div class="mb-3 card">
+                <div class="card-body">
+                  <form id="form-method" enctype=multipart/form-data>
+                    <div class="position-relative row form-group">
+                      <label for="type" class="col-sm-2 col-form-label">Type</label>
+                      <div class="col-md-10">
+                        <select name="type" id="type" class="form-control">
+                          <option>reader</option>
+                          <option>processing</option>
+                          <option>plot</option>
+                          <option>iplot</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="position-relative row form-group">
+                      <label for="package" class="col-md-2 col-form-label">Package</label>
+                      <div class="col-md-10">
+                        <input name="package" id="package"
+                               placeholder="Package of the method"
+                               type="text" class="form-control is-invalid required"></div>
+                    </div>
+                    <div class="position-relative row form-group">
+                      <label for="name" class="col-md-2 col-form-label">Name</label>
+                      <div class="col-md-10">
+                        <input name="name" id="name"
+                               placeholder="Name of the method"
+                               type="text" class="form-control is-invalid required"></div>
+                    </div>
+                    <div class="position-relative row form-group">
+                      <label for="description" class="col-sm-2 col-form-label">Description</label>
+                      <div class="col-sm-10">
+                                                <textarea name="description" id="description"
+                                                          placeholder="Short description of the method"
+                                                          class="form-control">
+                                                </textarea>
+                      </div>
+                    </div>
+                    <div class="position-relative row form-group">
+                      <label class="col-md-2 col-form-label">Parameters</label>
+                      <div class="col-md-10">
+                        <button type="button" class="mb-2 mr-2 btn btn-primary"
+                                id="btn-new-param">Add New Parameter
+                        </button>
+                        <table class="mb-0 table table-hover" id="table-params">
+                          <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Annotation</th>
+                            <th></th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="card-footer">
+                  <button class="my-2 mr-2 btn btn-primary" onclick="postMethod()">Submit</button>
+                  <button class="my-2 mr-2 btn btn-danger" onclick="resetForm()">Reset</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block modal %}
+  <div class="modal fade" id="modal-new-param" tabindex="-1" role="dialog" aria-labelledby="newMethodModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add/Update a New Parameter</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="form-param">
+
+            <div class="position-relative row form-group">
+              <label for="param-name" class="col-md-2 col-form-label">Parameter Name</label>
+              <div class="col-md-8">
+                <input name="param-name" id="param-name" class="is-invalid form-control required"
+                       placeholder="Name of the parameter"
+                       type="text">
+              </div>
+              <div class="col-md-2">
+                <button type="button" id="param-required" class="btn btn-secondary btn-checkbox">
+                  Required
+                </button>
+              </div>
+            </div>
+
+            <div class="position-relative row form-group">
+              <label for="param-type" class="col-sm-2 col-form-label">Parameter type</label>
+              <div class="col-md-8">
+                <select name="param-type" id="param-type" class="form-control">
+                  <option>text</option>
+                  <option>number</option>
+                  <option>option</option>
+                  <option>bool</option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <button type="button" id="param-is-list" class="btn btn-secondary btn-checkbox">
+                  List-like Input
+                </button>
+              </div>
+            </div>
+
+            <div class="position-relative row form-group" id="div-options">
+              <label for="param-options" class="col-sm-2 col-form-label">Options</label>
+              <div class="col-sm-10">
+                        <textarea name="param-options" id="param-options" class="is-invalid form-control required"
+                                  placeholder='Options of the parameter, separated by ","'></textarea>
+              </div>
+            </div>
+
+            <div class="position-relative row form-group">
+              <label for="param-default" class="col-md-2 col-form-label">Default Value (OPTIONAL)</label>
+              <div class="col-md-10">
+                <input name="param-default" id="param-default"
+                       placeholder="Default Value of the parameter, if the default value is empty string, input EMPTY_STRING"
+                       type="text" class="form-control"></div>
+            </div>
+
+            <div class="position-relative row form-group">
+              <label for="param-annotation" class="col-sm-2 col-form-label">Annotation (OPTIONAL)</label>
+              <div class="col-sm-10">
+                <textarea name="param-annotation" id="param-annotation"
+                          placeholder="Short description of the parameter, optional"
+                          class="form-control"></textarea>
+
+              </div>
+            </div>
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="addParam()">Confirm</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">
+            Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-import-dataset" tabindex="-1" role="dialog" aria-labelledby="model_t"
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Import Dataset</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="position-relative row form-group">
+            <form id="form-upload" enctype=multipart/form-data>
+              <label for="file" class="col-sm-2 col-form-label">JSON</label>
+              <div class="col-sm-10">
+                <input name="file" id="file" type="file" accept=".json"
+                       class="form-control-file">
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <p class='text-danger'>WARNING, this will reset all methods stored and reconstruct the methods based
+            on the input file</p>
+          <button type="button" class="btn btn-danger" onclick="importMethods()">Understand and Import
+          </button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+{% block js %}
+  <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+  <script type="text/javascript" src={% static "scripts/download.js" %}></script>
+  <script type="text/javascript" src={% static "scripts/installed-methods.js" %}></script>
+{% endblock %}

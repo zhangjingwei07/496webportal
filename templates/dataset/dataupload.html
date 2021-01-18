@@ -1,0 +1,78 @@
+{% extends 'nav.html' %}
+{% load static %}
+{% block content %}
+    <div class="app-main__outer">
+        <div class="app-main__inner">
+            <div class="app-page-title">
+                <div class="page-title-wrapper">
+                    <div class="page-title-heading">
+                        <div class="page-title-icon">
+                            <i class="fas fa-file-upload">
+                            </i>
+                        </div>
+                        <div>Import Dataset
+                            <div class="page-title-subheading">
+                                Upload the Dataset to the server, only <span id="allowed_file">{{ allowed_file }}</span>
+                                are allowed to upload
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3 card">
+                        <div class="card-body">
+                            <form id="form-upload" enctype=multipart/form-data>
+                                <div class="position-relative row form-group">
+                                    <label for="file" class="col-sm-2 col-form-label">File</label>
+                                    <div class="col-md-8">
+                                        <input name="file" id="file" type="file"
+                                               class="form-control-file">
+                                        <small class="form-text text-muted" id="file-text">For .mtx, please upload the
+                                            directory as a zip file</small>
+                                    </div>
+                                </div>
+                                <div class="position-relative row form-group">
+                                    <label for="reader" class="col-sm-2 col-form-label">Reader</label>
+                                    <div class="col-sm-8">
+                                        <select name="select" id="reader" class="form-control custom-select">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="position-relative row form-group">
+                                    <label for="name" class="col-sm-2 col-form-label">Dataset
+                                        Name</label>
+                                    <div class="col-sm-8"><input name="name" id="name" placeholder="Name of the dataset"
+                                                                 type="text" class="form-control"></div>
+                                </div>
+
+                                <div class="position-relative row form-group">
+                                    <label for="owner" class="col-sm-2 col-form-label">Owner</label>
+                                    <div class="col-sm-8"><input name="owner" id="owner"
+                                                                 placeholder="Owner of the dataset" type="text"
+                                                                 class="form-control" value="Upload"></div>
+                                </div>
+
+                                <div class="position-relative row form-group">
+                                    <label for="description" class="col-sm-2 col-form-label">Description</label>
+                                    <div class="col-sm-8"><textarea name="description" id="description"
+                                                                    placeholder="Short description of the dataset"
+                                                                    class="form-control"></textarea></div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer">
+                            <button class="my-2 mr-2 btn btn-primary" onclick="uploadFile()">Submit</button>
+                            <button class="my-2 mr-2 btn btn-danger" onclick="resetForm()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src={% static "scripts/dataset/dataupload.js" %}></script>
+{% endblock %}

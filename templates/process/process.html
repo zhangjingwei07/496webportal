@@ -1,0 +1,63 @@
+{% extends 'result.html' %}
+{% load static %}
+{% block content %}
+    <div class="app-main__outer">
+        <div class="app-main__inner">
+            <div class="app-page-title">
+                <div class="page-title-wrapper">
+                    <div class="page-title-heading">
+                        <div class="page-title-icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <div>
+                            <span id="worker-name">{{ worker.name }}</span>
+                            <div class="page-title-subheading">
+                                Last Modified: {{ worker.time }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-title-actions">
+                        <button class="btn btn-danger mr-3 id" onclick="remove_history('{{ worker.id }}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="main-card mb-3 card">
+                        <div class="card-header">Progress Report</div>
+                        <div class="card-body">
+                            <div class="row" id="report-div">
+
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-success btn-lg" id="script-button">
+                                Export Python script
+                            </button>
+                            <button class="btn btn-primary btn-lg ml-3" id="report-button">
+                                Export Report
+                            </button>
+                            <a class="btn btn-primary btn-lg ml-3"
+                               href="/userData/processes/{{ worker.id }}/procedure.json" download>
+                                Export Procedure
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block js %}
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+    <script type="text/javascript" src={% static "scripts/download.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/process/process-detail.js" %}></script>
+{% endblock %}

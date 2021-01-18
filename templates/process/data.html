@@ -1,0 +1,104 @@
+{% extends 'result.html' %}
+{% load static %}
+{% block content %}
+    <div class="app-main__outer">
+        <div class="app-main__inner">
+            <div class="app-page-title">
+                <div class="page-title-wrapper">
+                    <div class="page-title-heading">
+                        <div class="page-title-icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <div>
+                            <span id="worker-name">{{ worker.name }}</span>
+                            <div class="page-title-subheading">
+                                Last Modified: {{ worker.time }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-title-actions">
+                        <button class="btn btn-danger mr-3 id" onclick="remove_history('{{ worker.id }}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="main-card mb-3 card">
+                        <div class="card-header">Data Summary</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p>Number of Variables <span class="text-success">{{ dataset.n_vars }}</span></p>
+                                    <p>Number of observations <span class="text-success">{{ dataset.n_obs }}</span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <table class="mb-0 table table-borderless">
+                                        <tbody>
+                                        {% for k, v in dataset.attrs.items %}
+                                            <tr>
+                                                <th scope="row">{{ k }}</th>
+                                                <td>{{ v|join:", " }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="main-card mb-3 card">
+                        <div class="card-header">Variables</div>
+                        <div class="card-body">
+                            <div class="row" id="table-vars">
+                                <div class="col">
+                                    <ul class="pagination"></ul>
+                                </div>
+                                {% autoescape off %}{{ vars }}{% endautoescape %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="main-card mb-3 card">
+                        <div class="card-header">Observations</div>
+                        <div class="card-body">
+                            <div class="row" id="table-obs">
+                                <div class="col">
+                                    <ul class="pagination"></ul>
+                                </div>
+                                {% autoescape off %}{{ obs }}{% endautoescape %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+    <script>
+        $(document).ready(() => {
+            const table_option = {
+                page: 20,
+                pagination: true
+            };
+            $('.table tbody').addClass("list");
+            new List('table-vars', table_option);
+            new List('table-obs', table_option);
+        });
+    </script>
+{% endblock %}

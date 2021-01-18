@@ -1,0 +1,100 @@
+{% extends 'frame.html' %}
+{% load static %}
+
+{% block header %}
+
+    <ul class="header-menu nav">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="change-layout" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">Change Layout</a>
+            <div class="dropdown-menu" aria-labelledby="change-layout">
+                <a id="orientation" class="button-link dropdown-item" data-orientation="v">Vertical Layout</a>
+                <a id="legend" class="button-link dropdown-item">Show Legend</a>
+                <a id="template" class="button-link dropdown-item">Light Background</a>
+            </div>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="components" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">View Components</a>
+            <div class="dropdown-menu" aria-labelledby="components">
+            </div>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block sidebar %}
+    <ul class="vertical-nav-menu">
+        <li>
+            <a href="/plot/plots.html?id={{ worker.id }}">
+                <i class="metismenu-icon fas fa-chevron-circle-left"></i>
+                All Plots
+            </a>
+            <a href="#" id="data-wizard">
+                <i class="metismenu-icon fas fa-filter"></i>
+                Data Export
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <div class="app-main__outer">
+        <div class="app-main__inner" style="padding-top: 0">
+            <span id="output" data-id="{{ worker.id }}" data-link={{ link }} hidden>{{ output }}</span>
+            <div id="plotly" style="height: 100vh; margin: 0 -30px 0 -30px;"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block modal %}
+    <div class="modal fade" id="modal-data-wizard" tabindex="-1" role="dialog" aria-labelledby="datasetModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">Data Exporter</div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-4">
+                            <div class="widget-content">
+                                <div class="widget-content-wrapper">
+                                    <div class="widget-content-right ml-0 mr-3">
+                                        <div class="widget-numbers text-success" id="selected-length">0</div>
+                                    </div>
+                                    <div class="widget-content-left">
+                                        <div class="widget-heading" id="selection-div">Number of Observations
+                                            Selected<br>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            <div class="position-relative form-group">
+                                <label for="name-input">Dataset Name</label>
+                                <input name="city" id="name-input" type="text" class="form-control">
+                            </div>
+                            <div class="position-relative form-group">
+                                <label for="description-input">Description</label>
+                                <textarea name="city" id="description-input" type="text"
+                                          class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="mt-2 mr-2 btn btn-success" id="select-confirm" disabled>Export Data</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block head %}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src={% static "scripts/plot/plotly-options.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/plot/plotly-plot.js" %}></script>
+{% endblock %}

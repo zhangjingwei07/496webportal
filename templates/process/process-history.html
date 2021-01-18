@@ -1,0 +1,40 @@
+{% extends 'nav.html' %}
+{% load static %}
+{% block content %}
+<div class="app-main__outer">
+  <div class="app-main__inner">
+    <div class="app-page-title">
+      <div class="page-title-wrapper">
+        <div class="page-title-heading">
+          <div class="page-title-icon">
+            <i class="fas fa-history">
+            </i>
+          </div>
+          <div>Process History
+            <div class="page-title-subheading">
+              View the current processes, retrieve reports, and download scripts
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+
+      <div id="progress-history-table">
+        <div class="list row">
+
+        </div>
+      </div>
+
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block js %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+    <script type="text/javascript" src={% static "/scripts/process/process-history.js" %}></script>
+{% endblock %}

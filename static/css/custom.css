@@ -1,0 +1,59 @@
+.card-process {
+  height: 240px;
+  overflow-y: auto;
+}
+
+#reader-table, #dataset-table .list tr {
+    cursor: pointer;
+}
+
+
+.card-new-steps, .card-progress-report {
+  height: 200px;
+  overflow-y: auto;
+  cursor: pointer;
+}
+.card-new-steps:hover {
+  border: none !important;
+  box-shadow: none !important;
+  background-color: #3ac47d;
+  color: white;
+}
+
+.status[data-status="1"] {
+  color: #3ac47d;
+}
+.status[data-status="0"] {
+  color: #3f6ad8;
+}
+.status[data-status="2"] {
+  color: #d92550;
+}
+
+#progress-history-table a {
+  text-decoration: none;
+}
+
+#progress-history-table a .widget-subheading {
+  color: #343a40;
+}
+
+.plot-card-body {
+  height: 500px;
+}
+
+.plot-detail-card {
+    height: 100vh;
+}
+
+.button-link {
+    cursor: pointer;
+}
+
+.active-sidebar {
+    color: #3ac47d !important;
+}
+
+table .sort {
+    cursor: pointer;
+}
